@@ -30,6 +30,9 @@ REGION_LEVELS = [
     "Mymensingh", "Rajshahi", "Rangpur", "Sylhet",
 ]
 
+N_SPLITS = 5
+FOLD_SEED = 42
+
 DROP_CONSTANT_COLS = True
 ADD_NAN_FLAGS = True
 APPLY_LOG1P = True
@@ -117,6 +120,17 @@ def data_dir() -> Path:
         if hits:
             return hits[0].parent
     return Path(__file__).resolve().parent / "Dataset"
+
+
+def folds_dir() -> Path:
+    """Committed, unlike cache_dir() -- the frozen split is a shared team artifact."""
+    d = Path(__file__).resolve().parent / "folds"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
+def frozen_folds_path(n_splits: int = N_SPLITS) -> Path:
+    return folds_dir() / f"frozen_folds_{n_splits}.npy"
 
 
 def cache_dir() -> Path:
@@ -443,29 +457,118 @@ def load_test(n_rows: int | None = None, mmap: bool = True) -> ChurnData:
     return _load_split("test", n_rows, mmap)
 
 
-def make_folds(y: np.ndarray, n_splits: int = 5, seed: int = 42,
-               frozen_path: str | Path | None = None) -> np.ndarray:
-    """Per-row fold assignment. Loads the team's frozen file if present.
+def _ids_digest(ids: np.ndarray) -> str:
+    import hashlib
+    return hashlib.sha256(np.asarray(ids).astype("<U16").tobytes()).hexdigest()
 
-    SWAP POINT: when Sameen ships the frozen split, pass frozen_path=<file> and
-    every downstream number becomes comparable across the team.
+
+def freeze_folds(n_splits: int = N_SPLITS, seed: int = FOLD_SEED, force: bool = False) -> np.ndarray:
+    """Generate the shared 5-fold split over the FULL train set and commit it to disk.
+
+    Run once, commit folds/, never run again. Regenerating with a different seed
+    silently invalidates every number the team has already reported.
     """
-    if frozen_path is not None and Path(frozen_path).exists():
-        folds = np.load(frozen_path)
-        if len(folds) != len(y):
-            raise ValueError(f"frozen folds length {len(folds)} != {len(y)} rows")
-        print(f"loaded FROZEN folds from {frozen_path}")
-        return folds
+    import json as _json
+
+    path = frozen_folds_path(n_splits)
+    manifest_path = path.with_suffix(".json")
+    if path.exists() and not force:
+        print(f"frozen folds already exist: {path}  (pass force=True to regenerate)")
+        return np.load(path)
 
     from sklearn.model_selection import StratifiedKFold
 
-    print(f"WARNING: using PLACEHOLDER folds (seed={seed}) -- not comparable across the team")
+    train = load_train()
+    y, ids = train.y, train.ids
+
     folds = np.empty(len(y), dtype=np.int8)
     skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=seed)
     for k, (_, val_idx) in enumerate(skf.split(np.zeros(len(y)), y)):
         folds[val_idx] = k
-    cache = cache_dir() / f"folds_placeholder_s{seed}_k{n_splits}.npy"
-    np.save(cache, folds)
+
+    np.save(path, folds)
+    manifest = {
+        "n_rows": int(len(y)),
+        "n_splits": int(n_splits),
+        "seed": int(seed),
+        "stratified_on": TARGET_COL,
+        "sklearn_splitter": "StratifiedKFold(shuffle=True)",
+        "row_order": f"as-read from {TRAIN_FILE}",
+        "ids_sha256": _ids_digest(ids),
+        "first_id": str(ids[0]),
+        "last_id": str(ids[-1]),
+        "overall_churn": float(y.mean()),
+        "fold_sizes": np.bincount(folds, minlength=n_splits).tolist(),
+        "fold_churn": [float(y[folds == k].mean()) for k in range(n_splits)],
+    }
+    manifest_path.write_text(_json.dumps(manifest, indent=2))
+
+    print(f"FROZE {n_splits}-fold split -> {path}")
+    print(f"  {len(y):,} rows | seed {seed} | overall churn {y.mean():.6f}")
+    for k in range(n_splits):
+        m = folds == k
+        print(f"  fold {k}: n={m.sum():,}  churn={y[m].mean():.6f}")
+    print(f"  ids sha256 {manifest['ids_sha256'][:16]}...")
+    print("  -> commit folds/ so the whole team shares this split")
+    return folds
+
+
+def make_folds(y: np.ndarray, n_splits: int = N_SPLITS, seed: int = FOLD_SEED,
+               frozen_path: str | Path | None = None, ids: np.ndarray | None = None,
+               allow_placeholder: bool = False) -> np.ndarray:
+    """Per-row validation-fold assignment, from the frozen split by default.
+
+    Verifies the fold file against the row identity it was built on, so reordered
+    or regenerated data cannot silently mis-align folds. Pass `ids` to enable it.
+    """
+    import json as _json
+
+    path = Path(frozen_path) if frozen_path is not None else frozen_folds_path(n_splits)
+
+    if not path.exists():
+        if not allow_placeholder:
+            raise FileNotFoundError(
+                f"frozen fold file not found: {path}\n"
+                f"Run  python -c \"import data_loader; data_loader.freeze_folds()\"  once, "
+                f"then commit folds/. Pass allow_placeholder=True only for throwaway experiments."
+            )
+        from sklearn.model_selection import StratifiedKFold
+        print(f"WARNING: PLACEHOLDER folds (seed={seed}) -- NOT comparable across the team")
+        folds = np.empty(len(y), dtype=np.int8)
+        skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=seed)
+        for k, (_, val_idx) in enumerate(skf.split(np.zeros(len(y)), y)):
+            folds[val_idx] = k
+        return folds
+
+    folds = np.load(path)
+    manifest_path = path.with_suffix(".json")
+    manifest = _json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
+
+    if len(folds) < len(y):
+        raise ValueError(f"frozen folds cover {len(folds):,} rows but y has {len(y):,}")
+
+    sampled = len(y) < len(folds)
+    if sampled:
+        folds = folds[:len(y)]
+
+    if ids is not None:
+        ids = np.asarray(ids)
+        if not sampled and "ids_sha256" in manifest:
+            if _ids_digest(ids) != manifest["ids_sha256"]:
+                raise AssertionError(
+                    "ACCOUNT_ID order does not match the frozen split -- folds would be "
+                    "mis-assigned. Rebuild the cache, or re-freeze if the data really changed."
+                )
+        elif manifest.get("first_id") and str(ids[0]) != manifest["first_id"]:
+            raise AssertionError(
+                f"row 0 is {ids[0]}, frozen split was built on {manifest['first_id']}"
+            )
+
+    tag = f"prefix sample of {len(y):,} rows" if sampled else f"all {len(y):,} rows"
+    print(f"FROZEN folds: {path.name} | seed {manifest.get('seed', '?')} | {tag}"
+          + (" | ids verified" if ids is not None and not sampled else ""))
+    if sampled:
+        print("  NOTE: sample mode -- fold sizes below are a prefix, not the frozen fold sizes")
     return folds
 
 
