@@ -1,0 +1,26 @@
+{
+  "n_rows": 595000,
+  "n_splits": 5,
+  "seed": 42,
+  "stratified_on": "CHURN",
+  "sklearn_splitter": "StratifiedKFold(shuffle=True)",
+  "row_order": "as-read from account_features_train_top88.csv",
+  "ids_sha256": "98bfbd38232ae3b9c23d025b1c64bf4575aebf29bfd6eac4ad615c47e3e415c5",
+  "first_id": "CUST00000001",
+  "last_id": "CUST00850000",
+  "overall_churn": 0.12678151260504203,
+  "fold_sizes": [
+    119000,
+    119000,
+    119000,
+    119000,
+    119000
+  ],
+  "fold_churn": [
+    0.12678151260504203,
+    0.12678151260504203,
+    0.12678151260504203,
+    0.12678151260504203,
+    0.12678151260504203
+  ]
+}
