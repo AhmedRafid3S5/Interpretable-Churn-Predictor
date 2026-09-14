@@ -1,0 +1,309 @@
+{
+  "csv": {
+    "dir": "E:\\Study\\Projects\\Interpretable-Churn-Predictor\\Dataset",
+    "n_train_rows": 595000,
+    "n_test_rows": 255000,
+    "n_raw_features": 88,
+    "churn_rate": 0.12678151260504203,
+    "sha256": {
+      "train": "12ff9995d717914967f3eeb95c9d2a28adfc85a2b630493e44aafefd8d517fdc",
+      "test": "5771db0ee2ca0264ebc5dbe90e27fd40ec6806c1e21c828daec8572060b228c6"
+    }
+  },
+  "matrix": {
+    "schema_version": 3,
+    "n_features": 127,
+    "views": {
+      "recency": 11,
+      "frequency": 50,
+      "monetary": 13,
+      "network": 4,
+      "calendar": 21,
+      "balance": 11,
+      "dec_segment": 6,
+      "demographic": 11
+    },
+    "feature_cols": [
+      "recency_days",
+      "region_recency_deviation",
+      "recency_pct_of_tenure",
+      "mean_gap_days",
+      "zero_days_7d",
+      "zero_days_14d",
+      "rec_le7",
+      "rec_8_29",
+      "rec_ge30",
+      "span_days",
+      "span_days__isna",
+      "n_trx_7d",
+      "n_trx_7d__isna",
+      "n_trx_14d",
+      "n_trx_14d__isna",
+      "n_trx_30d",
+      "n_trx_30d__isna",
+      "n_trx_60d",
+      "n_trx_60d__isna",
+      "n_trx_90d",
+      "n_trx_90d__isna",
+      "n_trx_total",
+      "n_trx_total__isna",
+      "out_trx_cnt_7d",
+      "out_trx_cnt_30d",
+      "out_trx_cnt_90d",
+      "active_days_7d",
+      "active_days_7d__isna",
+      "active_days_14d",
+      "active_days_14d__isna",
+      "active_days_30d",
+      "active_days_30d__isna",
+      "active_days_60d",
+      "active_days_60d__isna",
+      "active_days_90d",
+      "active_days_90d__isna",
+      "cnt_m1",
+      "cnt_m1__isna",
+      "cnt_m2",
+      "cnt_m2__isna",
+      "cnt_m3",
+      "cnt_m3__isna",
+      "vel_ratio_7_30",
+      "vel_ratio_7_30__isna",
+      "vel_ratio_14_60",
+      "vel_ratio_14_60__isna",
+      "vel_ratio_30_90",
+      "vel_ratio_30_90__isna",
+      "freq_recent_share_7d",
+      "freq_recent_share_30d",
+      "freq_momentum_7d_vs_30d",
+      "freq_momentum_30d_vs_90d",
+      "activity_drop_ratio",
+      "momentum_ratio",
+      "avg_trx_per_active_day_90d",
+      "n_limit_7d",
+      "n_limit_7d__isna",
+      "n_limit_14d",
+      "n_limit_14d__isna",
+      "n_limit_30d",
+      "n_limit_30d__isna",
+      "total_amt_7d",
+      "total_amt_7d__isna",
+      "total_amt_30d",
+      "total_amt_30d__isna",
+      "total_amt_60d",
+      "total_amt_60d__isna",
+      "total_amt_90d",
+      "total_amt_90d__isna",
+      "avg_amt_7d",
+      "avg_amt_7d__isna",
+      "out_amt_std_30d",
+      "n_salary_30d",
+      "n_salary_30d__isna",
+      "uniq_cp_30d",
+      "uniq_cp_30d__isna",
+      "recency_p2p",
+      "recency_billpay",
+      "n_weekend_7d",
+      "n_weekend_7d__isna",
+      "n_weekend_14d",
+      "n_weekend_14d__isna",
+      "n_weekend_90d",
+      "n_weekend_90d__isna",
+      "weekend_ratio_14d",
+      "weekend_ratio_14d__isna",
+      "weekend_ratio_30d",
+      "weekend_ratio_30d__isna",
+      "n_sunday_7d",
+      "n_sunday_7d__isna",
+      "active_days_mar",
+      "active_days_mar_1_15",
+      "active_days_mar_16_31",
+      "n_trx_mar_16_31",
+      "total_amt_mar_1_15",
+      "total_amt_mar_16_31",
+      "late_march_share",
+      "late_march_active_share",
+      "march_second_half_drop",
+      "last_balance",
+      "mean_bal_7d",
+      "max_bal_7d",
+      "min_bal_7d",
+      "std_bal_7d",
+      "std_bal_7d__isna",
+      "std_bal_14d",
+      "std_bal_14d__isna",
+      "balance_std_7d",
+      "balance_first_90d",
+      "last_bal_to_mean",
+      "dec_cluster",
+      "dec_latent_3",
+      "dec_latent_4",
+      "dec_latent_5",
+      "dec_latent_9",
+      "dec_prob_4",
+      "GENDER=Female",
+      "GENDER=Male",
+      "GENDER=Other",
+      "REGION=Barishal",
+      "REGION=Chattogram",
+      "REGION=Dhaka",
+      "REGION=Khulna",
+      "REGION=Mymensingh",
+      "REGION=Rajshahi",
+      "REGION=Rangpur",
+      "REGION=Sylhet"
+    ],
+    "feature_cols_sha256": "9c25d9d34616d5697d9aa70e04812320d9e7ee76b075c1a472c329ff39cc5448"
+  },
+  "folds": {
+    "file": "frozen_folds_5.npy",
+    "sha256": "2cfb62741b01c0df7b45b824db67961f1fc2568ebd59d39e79fe79c43b5fc81b",
+    "n_splits": 5,
+    "seed": 42,
+    "ids_sha256": "98bfbd38232ae3b9c23d025b1c64bf4575aebf29bfd6eac4ad615c47e3e415c5",
+    "per_fold": [
+      {
+        "fold": 0,
+        "n_rows": 119000,
+        "churn_rate": 0.12678151260504203
+      },
+      {
+        "fold": 1,
+        "n_rows": 119000,
+        "churn_rate": 0.12678151260504203
+      },
+      {
+        "fold": 2,
+        "n_rows": 119000,
+        "churn_rate": 0.12678151260504203
+      },
+      {
+        "fold": 3,
+        "n_rows": 119000,
+        "churn_rate": 0.12678151260504203
+      },
+      {
+        "fold": 4,
+        "n_rows": 119000,
+        "churn_rate": 0.12678151260504203
+      }
+    ]
+  },
+  "environment": {
+    "numpy": "2.4.1",
+    "pandas": "3.0.0",
+    "scikit-learn": "1.8.0"
+  },
+  "all_passed": true,
+  "checks": [
+    {
+      "check": "train layout",
+      "ok": true,
+      "detail": "92 cols = ID + GENDER + REGION + 88 features + CHURN"
+    },
+    {
+      "check": "test layout",
+      "ok": true,
+      "detail": "91 cols, no CHURN"
+    },
+    {
+      "check": "feature count",
+      "ok": true,
+      "detail": "88 unique feature columns"
+    },
+    {
+      "check": "row counts",
+      "ok": true,
+      "detail": "train 595,000 | test 255,000"
+    },
+    {
+      "check": "ids unique",
+      "ok": true,
+      "detail": "no duplicates"
+    },
+    {
+      "check": "train/test disjoint",
+      "ok": true,
+      "detail": "0 shared accounts"
+    },
+    {
+      "check": "labels binary",
+      "ok": true,
+      "detail": "churn 0.126782 (75,435 of 595,000)"
+    },
+    {
+      "check": "categorical levels",
+      "ok": true,
+      "detail": "GENDER/REGION within data_loader levels"
+    },
+    {
+      "check": "row order",
+      "ok": true,
+      "detail": "loader rows match CSV order"
+    },
+    {
+      "check": "labels",
+      "ok": true,
+      "detail": "loader labels match CSV"
+    },
+    {
+      "check": "FEATURE_COLS",
+      "ok": true,
+      "detail": "127 columns, identical for train and test"
+    },
+    {
+      "check": "view partition",
+      "ok": true,
+      "detail": "8 views cover every column exactly once"
+    },
+    {
+      "check": "no NaN/inf",
+      "ok": true,
+      "detail": "train (595000, 127) | test (255000, 127)"
+    },
+    {
+      "check": "fold file exists",
+      "ok": true,
+      "detail": "595,000 values, dtype int8"
+    },
+    {
+      "check": "manifest present",
+      "ok": true,
+      "detail": "seed 42, 5 splits"
+    },
+    {
+      "check": "covers train set",
+      "ok": true,
+      "detail": "595,000 rows"
+    },
+    {
+      "check": "fold values",
+      "ok": true,
+      "detail": "folds [0, 1, 2, 3, 4]"
+    },
+    {
+      "check": "fold sizes",
+      "ok": true,
+      "detail": "119,000-119,000 rows per fold"
+    },
+    {
+      "check": "stratified",
+      "ok": true,
+      "detail": "max deviation 0.00e+00"
+    },
+    {
+      "check": "ids fingerprint",
+      "ok": true,
+      "detail": "fold file was built on this exact row order"
+    },
+    {
+      "check": "recipe reproduces",
+      "ok": true,
+      "detail": "StratifiedKFold(5, shuffle=True, random_state=42) on CSV order"
+    },
+    {
+      "check": "make_folds agrees",
+      "ok": true,
+      "detail": "data_loader.make_folds returns this array"
+    }
+  ]
+}
