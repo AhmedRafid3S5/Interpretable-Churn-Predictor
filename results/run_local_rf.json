@@ -1,0 +1,55 @@
+{
+  "run_tag": "local_rf",
+  "models": [
+    "rf"
+  ],
+  "drop_views": [],
+  "sample_rows": null,
+  "seed": 42,
+  "n_features": 127,
+  "params": {
+    "rf": {
+      "n_estimators": 300,
+      "max_features": "sqrt",
+      "min_samples_leaf": 20,
+      "n_jobs": -1,
+      "random_state": 42
+    }
+  },
+  "folds": {
+    "file": "frozen_folds_5.npy",
+    "seed": 42,
+    "ids_sha256": "98bfbd38232ae3b9c23d025b1c64bf4575aebf29bfd6eac4ad615c47e3e415c5"
+  },
+  "versions": {
+    "numpy": "2.4.1",
+    "pandas": "3.0.0",
+    "scikit-learn": "1.8.0"
+  },
+  "summary": {
+    "auc": {
+      "rf": {
+        "mean": 0.9847135400360802,
+        "std": 0.00039570266985372614
+      }
+    },
+    "ap": {
+      "rf": {
+        "mean": 0.9233402444339186,
+        "std": 0.0013950832295153142
+      }
+    },
+    "p_at_10": {
+      "rf": {
+        "mean": 0.9141680672268908,
+        "std": 0.0013993552239238267
+      }
+    },
+    "r_at_10": {
+      "rf": {
+        "mean": 0.721057864386558,
+        "std": 0.0011037533747394156
+      }
+    }
+  }
+}

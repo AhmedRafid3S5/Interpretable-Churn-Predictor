@@ -1,0 +1,114 @@
+{
+  "run_tag": "kaggle",
+  "models": [
+    "logreg",
+    "lgbm",
+    "catboost"
+  ],
+  "drop_views": [],
+  "sample_rows": null,
+  "seed": 42,
+  "n_features": 127,
+  "params": {
+    "lgbm": {
+      "objective": "binary",
+      "metric": "auc",
+      "boosting_type": "gbdt",
+      "max_bin": 255,
+      "learning_rate": 0.05,
+      "num_leaves": 127,
+      "max_depth": 8,
+      "min_child_samples": 100,
+      "feature_fraction": 0.8,
+      "bagging_fraction": 0.8,
+      "bagging_freq": 1,
+      "reg_alpha": 0.2,
+      "reg_lambda": 1.5,
+      "verbose": -1,
+      "seed": 42,
+      "force_col_wise": true
+    },
+    "catboost": {
+      "loss_function": "Logloss",
+      "eval_metric": "AUC",
+      "depth": 7,
+      "learning_rate": 0.05,
+      "n_estimators": 10000,
+      "l2_leaf_reg": 4.0,
+      "border_count": 254,
+      "random_seed": 42,
+      "od_type": "Iter",
+      "od_wait": 200,
+      "verbose": 0,
+      "task_type": "GPU"
+    }
+  },
+  "folds": {
+    "file": "frozen_folds_5.npy",
+    "seed": 42,
+    "ids_sha256": "98bfbd38232ae3b9c23d025b1c64bf4575aebf29bfd6eac4ad615c47e3e415c5"
+  },
+  "versions": {
+    "numpy": "2.0.2",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.6.1"
+  },
+  "summary": {
+    "auc": {
+      "catboost": {
+        "mean": 0.9847749282640279,
+        "std": 0.0004731206693467147
+      },
+      "lgbm": {
+        "mean": 0.9850154018749098,
+        "std": 0.00039934591391719085
+      },
+      "logreg": {
+        "mean": 0.9838362029083975,
+        "std": 0.00035699476451995035
+      }
+    },
+    "ap": {
+      "catboost": {
+        "mean": 0.923598787579247,
+        "std": 0.0016209618336110302
+      },
+      "lgbm": {
+        "mean": 0.9239525319694227,
+        "std": 0.001422151266534094
+      },
+      "logreg": {
+        "mean": 0.9174791165276028,
+        "std": 0.0012759927618475244
+      }
+    },
+    "p_at_10": {
+      "catboost": {
+        "mean": 0.913126050420168,
+        "std": 0.00213203727431253
+      },
+      "lgbm": {
+        "mean": 0.9134117647058824,
+        "std": 0.0020793862522228024
+      },
+      "logreg": {
+        "mean": 0.9095294117647059,
+        "std": 0.0025416521719171456
+      }
+    },
+    "r_at_10": {
+      "catboost": {
+        "mean": 0.7202359647378538,
+        "std": 0.0016816625945727396
+      },
+      "lgbm": {
+        "mean": 0.72046132431895,
+        "std": 0.0016401336515842284
+      },
+      "logreg": {
+        "mean": 0.7173990853052297,
+        "std": 0.002004749840645147
+      }
+    }
+  }
+}

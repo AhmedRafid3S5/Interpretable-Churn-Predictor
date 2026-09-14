@@ -1,0 +1,88 @@
+{
+  "run_tag": "moe",
+  "model": "moe",
+  "architecture": "mixture of predictions, top-k routing",
+  "experts": [
+    "recency",
+    "frequency",
+    "monetary",
+    "network",
+    "calendar",
+    "balance",
+    "dec_segment",
+    "demographic"
+  ],
+  "top_k": 2,
+  "drop_views": [],
+  "sample_rows": null,
+  "seed": 42,
+  "n_features": 127,
+  "hyperparameters": {
+    "hidden": 64,
+    "emb": 32,
+    "dropout": 0.1,
+    "gate_tau": 1.0,
+    "noise_std": 0.3,
+    "epochs": 40,
+    "batch": 1024,
+    "lr": 0.001,
+    "weight_decay": 1e-05,
+    "patience": 3,
+    "lambda_aux": 0.3,
+    "lambda_balance": 0.05,
+    "lambda_gate": 0.0
+  },
+  "routing": {
+    "effective_experts_mean": 1.822572946548462,
+    "effective_experts_median": 1.9359116554260254,
+    "coverage": {
+      "frequency": 0.14607563025210085,
+      "balance": 0.1374252100840336,
+      "recency": 0.13553781512605043,
+      "network": 0.13167899159663865,
+      "monetary": 0.12128403361344538,
+      "dec_segment": 0.118,
+      "calendar": 0.1124873949579832,
+      "demographic": 0.0975109243697479
+    },
+    "mean_weight": {
+      "recency": 0.13730663061141968,
+      "frequency": 0.13333700597286224,
+      "monetary": 0.1300608217716217,
+      "network": 0.1295907348394394,
+      "calendar": 0.1285087913274765,
+      "balance": 0.12924228608608246,
+      "dec_segment": 0.11838825047016144,
+      "demographic": 0.09356459230184555
+    }
+  },
+  "folds": {
+    "file": "frozen_folds_5.npy",
+    "seed": 42,
+    "ids_sha256": "98bfbd38232ae3b9c23d025b1c64bf4575aebf29bfd6eac4ad615c47e3e415c5"
+  },
+  "versions": {
+    "numpy": "2.0.2",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.6.1",
+    "torch": "2.10.0+cu128"
+  },
+  "summary": {
+    "auc": {
+      "mean": 0.9841557618021328,
+      "std": 0.0004606912238812463
+    },
+    "ap": {
+      "mean": 0.9212835106568248,
+      "std": 0.001257060652341988
+    },
+    "p_at_10": {
+      "mean": 0.9094621848739497,
+      "std": 0.003150195898600952
+    },
+    "r_at_10": {
+      "mean": 0.7173460595214423,
+      "std": 0.002484743898280044
+    }
+  }
+}
